@@ -17,16 +17,19 @@ RUMBLE_DATA['entry_time'] = ENTRY_TIME_SPLIT.apply(time_cleaner)
 RUMBLE_DATA['exit_time'] = EXIT_TIME_SPLIT.apply(time_cleaner)
 
 for year in RUMBLE_DATA['year'].unique():
-    RUMBLE_DATA.loc[RUMBLE_DATA['year'] == year, 'entry_time'] = (RUMBLE_DATA.loc[RUMBLE_DATA['year'] == year, 'entry_time'] -
-                                                                  RUMBLE_DATA.loc[RUMBLE_DATA['year'] == year, 'entry_time'].min())
-
     RUMBLE_DATA.loc[RUMBLE_DATA['year'] == year, 'exit_time'] = (RUMBLE_DATA.loc[RUMBLE_DATA['year'] == year, 'exit_time'] -
                                                                 RUMBLE_DATA.loc[RUMBLE_DATA['year'] == year, 'entry_time'].min())
 
+    RUMBLE_DATA.loc[RUMBLE_DATA['year'] == year, 'entry_time'] = (RUMBLE_DATA.loc[RUMBLE_DATA['year'] == year, 'entry_time'] -
+                                                                  RUMBLE_DATA.loc[RUMBLE_DATA['year'] == year, 'entry_time'].min())
+
+    
 RUMBLE_DATA['total_time'] = RUMBLE_DATA['exit_time'] - RUMBLE_DATA['entry_time']
 RUMBLE_DATA['total_elim'] = (RUMBLE_DATA['solo_elim'] + RUMBLE_DATA['group_elim'] + 
                              RUMBLE_DATA['illegal_elim'])
 
+RUMBLE_DATA['tag_partner'] = RUMBLE_DATA['tag_partner'].fillna(0)
+RUMBLE_DATA.fillna(0)
 MATCH_DATA = pd.DataFrame()
 
 for year in RUMBLE_DATA['year'].unique():
@@ -44,4 +47,28 @@ for year in RUMBLE_DATA['year'].unique():
 
 MATCH_DATA.columns = ['year', 'split']
 
-print(MATCH_DATA)
+for wrestler in RUMBLE_DATA['name'].unique():
+    year_count = 0
+    elim_count = 0
+    time_count = 0
+    app_count = 0
+    for year in RUMBLE_DATA.loc[RUMBLE_DATA['name'] == wrestler, 'year']:
+        RUMBLE_DATA.loc[(RUMBLE_DATA['name'] == wrestler) &
+                                (RUMBLE_DATA['year']== year), 'prev_app'] = year_count
+        year_count += 1
+        elim_count += int(RUMBLE_DATA.loc[(RUMBLE_DATA['name'] == wrestler) &
+                                        (RUMBLE_DATA['year']== year), 'total_elim'])
+        time_count += int(RUMBLE_DATA.loc[(RUMBLE_DATA['name'] == wrestler) &
+                                        (RUMBLE_DATA['year']== year), 'total_time'])
+        RUMBLE_DATA.loc[(RUMBLE_DATA['name'] == wrestler) &
+                                (RUMBLE_DATA['year']== year), 'cum_elim'] = elim_count
+        RUMBLE_DATA.loc[(RUMBLE_DATA['name'] == wrestler) &
+                                (RUMBLE_DATA['year']== year), 'avg_cum_elim'] = elim_count/year_count
+        RUMBLE_DATA.loc[(RUMBLE_DATA['name'] == wrestler) &
+                                (RUMBLE_DATA['year']== year), 'cum_time'] = time_count
+        RUMBLE_DATA.loc[(RUMBLE_DATA['name'] == wrestler) &
+                                (RUMBLE_DATA['year']== year), 'avg_cum_time'] = time_count/year_count                       
+
+
+RUMBLE_DATA.to_csv('/home/christian/Desktop/Royal_Rumble_Analysis/Rumble_Data_Cleaned.csv')
+MATCH_DATA.to_csv('/home/christian/Desktop/Royal_Rumble_Analysis/Match_Data.csv')
