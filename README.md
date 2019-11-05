@@ -1,5 +1,5 @@
 # Royal Rumble Data Analysis
-
+# Refer to the notebook titled 'Royal Rumble Data Analysis' 
 The WWE presents a product that is scripted entertainment in the veil of a legitimate sport. There are countless movies and tv shows that have depicted rare or impossible sporting events and outcomes, but professional wrestling as an art form relies on the suspension of the audience's disbelief- not merely for an hour or so, but in a sustained fashion over repeated viewings. Even though nearly every wrestling fan is aware of the fact that the product is scripted, they want it to be compelling theater. If a storyline is too predictable and/or doesn't align with what the audience desires as far as outcomes go, the outcry ranges from minor to near-revolt.
 
 The Royal Rumble is an annual event that features a match by the same name, in which two wrestlers begin in the ring and another joins them every 2-3 minutes until 30 wrestlers have entered the ring. The only way to be eliminated from the match is by being thrown over the top rope and having *both feet* touch the ground (a quite literal rule that has been taken advantage of on many occasions). It is one of the WWE's biggest attractions of the year, and the winner of the event is guaranteed to appear in the title match at WrestleMania (i.e., there are huge implications both in and out of the storyline itself).
